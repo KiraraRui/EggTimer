@@ -48,7 +48,7 @@
         android:id="@+id/actionTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select your egg"
+        android:text="Select your egg!"
         android:textColor="#B8B8B8"
         android:textSize="35sp"
         app:layout_constraintBottom_toTopOf="@id/buttonRow"
