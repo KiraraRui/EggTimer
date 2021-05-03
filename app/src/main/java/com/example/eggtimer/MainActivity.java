@@ -1,10 +1,13 @@
 package com.example.eggtimer;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
+
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements EggTimerPresenter.View{
 
+    private static final String TAG = "MainActivity";
     // implementation MVP pattern
     private EggTimerPresenter presenter;
 
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
     private ImageButton mediumBoiledButton;
     private ImageButton hardBoiledButton;
     private Button startupButton;
-
+    private MediaPlayer mediaPlayer;
 
     //The savedInstanceState is a reference to a Bundle object that is passed into the onCreate method of every Android Activity.
     // super is a keyword in Java. It refers to the immediate parents property. (WHY SUPER JAVA......WHYYY THAT NAMING...you aint super-dupper awesome you know)
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
         this.softBoiledButton = this.findViewById(R.id.softBoiledButton);
         this.mediumBoiledButton = this.findViewById(R.id.mediumBoiledButton);
         this.hardBoiledButton = this.findViewById(R.id.hardBoiledButton);
+        this.countDownText = this.findViewById(R.id.timerTxt);
 
         startupButton.setOnClickListener(startOnClickListener);
 
@@ -60,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
     }
 
     private void disableEggSelectButtons() {
-        softBoiledButton.setEnabled(true);
-        mediumBoiledButton.setEnabled(true);
-        hardBoiledButton.setEnabled(true);
+        softBoiledButton.setEnabled(false);
+        mediumBoiledButton.setEnabled(false);
+        hardBoiledButton.setEnabled(false);
     }
 
     private void enableStartButton() {
@@ -82,7 +87,9 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
         startupButton.setOnClickListener(startOnClickListener);
         startupButton.setText(R.string.start);
         enableButtonEggSelected();
+        countDownText.setText(R.string.TimerZero);
         presenter.stop();
+        mediaPlayer.stop();
     }
 
 
@@ -90,16 +97,19 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
     public void onButtonEggSelectedClicked(View view) {
         switch (view.getId()) {
             case R.id.softBoiledButton:
-                timeToCook = 300000;
+                Log.i(TAG, "onButtonEggSelectedClicked: ");
+                timeToCook = 3000;
                 onCountDown(timeToCook);
                 enableStartButton();
                 break;
             case R.id.mediumBoiledButton:
+                Log.i(TAG, "onButtonEggSelectedClicked: ");
                 timeToCook = 420000;
                 onCountDown(timeToCook);
                 enableStartButton();
                 break;
             case R.id.hardBoiledButton:
+                Log.i(TAG, "onButtonEggSelectedClicked: ");
                 timeToCook = 540000;
                 onCountDown(timeToCook);
                 enableStartButton();
@@ -112,9 +122,9 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
 
     //Display remaining int of time left in format minutes:seconds format.
         private void updateCountDownText(long time) {
-            int minutes = (int) (time / 60) / 60;
-            int seconds = (int) (time / 60) % 60;
-            String timeLeftFormatted = String.format("%02d:%02d", minutes / 60, seconds % 60);
+            int minutes = (int) (time / 1000) / 60;
+            int seconds = (int) (time / 1000) % 60;
+            String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
             countDownText.setText(timeLeftFormatted);
         }
 
@@ -124,5 +134,11 @@ public class MainActivity extends AppCompatActivity implements EggTimerPresenter
     public void onCountDown(long timeLeft) {updateCountDownText(timeLeft);}
 
     @Override
-    public void onEggTimerStopped() {enableButtonEggSelected();}
+    public void onEggTimerStopped() {
+        enableButtonEggSelected();
+
+        //play sound when egg is done
+        mediaPlayer = MediaPlayer.create(this, R.raw.seal);
+        mediaPlayer.start(); // no need to call prepare(); create() does that for you
+    }
 }

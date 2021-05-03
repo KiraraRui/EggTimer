@@ -41,10 +41,9 @@ public class EggTimer extends Thread {
             @Override
             //Callback fired when the time is up.
             public void onFinish() {
-
-                //play airhorn
-              // final MediaPlayer eggdone = MediaPlayer.create(this, R.raw.seal2);
-              //  eggdone.start();
+            for (EggTimerListener l : listeners){
+                l.onEggTimerStopped();
+            }
             }
         }.start();
 

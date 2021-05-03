@@ -11,10 +11,10 @@ public class EggTimerPresenter implements EggTimerListener {
 
     private EggTimer eggTimer;
 
-    private View v;
+    private View view;
 
-    public EggTimerPresenter(View v) {
-        this.v = v;
+    public EggTimerPresenter(View view) {
+        this.view = view;
     }
 
 
@@ -31,11 +31,11 @@ public class EggTimerPresenter implements EggTimerListener {
 
     //I have used override here as onCOuntDown and onEggTierstopped needs a behavior that is dif then originally defined
     @Override
-    public void onCountDown(long timeLeft) {v.onCountDown(timeLeft); }
+    public void onCountDown(long timeLeft) {view.onCountDown(timeLeft); }
 
     @Override
     public void onEggTimerStopped() {
         eggTimer.removeListener(this);
-        v.onEggTimerStopped();
+        view.onEggTimerStopped();
     }
 }
