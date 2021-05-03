@@ -19,7 +19,4 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.EggTimer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.EggTimer.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

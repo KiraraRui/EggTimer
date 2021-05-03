@@ -17,10 +17,6 @@ public class EggTimerPresenter implements EggTimerListener {
         this.v = v;
     }
 
-    public void stop() {
-        eggTimer.removeListener(this);
-        eggTimer.stopTimer();
-    }
 
     public void start(long timeToCook) {
         eggTimer = new EggTimer(timeToCook);
@@ -28,10 +24,14 @@ public class EggTimerPresenter implements EggTimerListener {
         eggTimer.run();
     }
 
-    @Override
-    public void onCountDown(long timeLeft) {
-        v.onCountDown(timeLeft);
+    public void stop() {
+        eggTimer.removeListener(this);
+        eggTimer.stopTimer();
     }
+
+    //I have used override here as onCOuntDown and onEggTierstopped needs a behavior that is dif then originally defined
+    @Override
+    public void onCountDown(long timeLeft) {v.onCountDown(timeLeft); }
 
     @Override
     public void onEggTimerStopped() {
